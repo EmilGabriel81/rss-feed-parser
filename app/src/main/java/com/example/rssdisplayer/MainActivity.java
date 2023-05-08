@@ -1,25 +1,20 @@
 package com.example.rssdisplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.AsyncTaskLoader;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
-import com.example.rssdisplayer.datahandler.HTTPDataHandler;
-import com.example.rssdisplayer.model.RSSObject;
-import com.google.gson.Gson;
+import com.example.rssdisplayer.view.DisplayRSSFeedActivity;
 
 public class MainActivity extends AppCompatActivity {
 
 
     /**
      * source from: https://agroromania.manager.ro/
+     * https://agroromania.manager.ro/rss_stiri.php
      * down the bottom "Feed RSS"
      * inspriration from: https://www.youtube.com/watch?v=APInjVO0WkQ
      * from Rss to JSON: https://rss2json.com

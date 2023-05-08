@@ -11,6 +11,7 @@
         android:layout_height="96dp"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
+        android:scaleType="fitXY"
         android:background="@android:drawable/screen_background_dark_transparent" />
 
     <TextView
@@ -27,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageview"
-        android:text="Date"
+        android:text="Date: "
         android:layout_below="@id/title" />
 
     <TextView
@@ -43,8 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageview"
-        android:linksClickable="true"
-        android:autoLink="web|email"
         android:text="Link"
         android:layout_below="@id/author" />
 

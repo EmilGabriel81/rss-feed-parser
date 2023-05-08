@@ -1,4 +1,4 @@
-package com.example.rssdisplayer;
+package com.example.rssdisplayer.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,10 +9,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.rssdisplayer.R;
 import com.example.rssdisplayer.datahandler.HTTPDataHandler;
 import com.example.rssdisplayer.model.RSSObject;
 import com.example.rssdisplayer.recyclerview.FeedAdapter;
 import com.google.gson.Gson;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class DisplayRSSFeedActivity extends AppCompatActivity {
@@ -28,9 +32,54 @@ public class DisplayRSSFeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_rssfeed);
 
         recyclerView = findViewById(R.id.recyclerview);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         loadRSS();
+       // loadRSSWithExecutors();
+    }
+
+    private void loadRSSWithExecutors() {
+        StringBuilder urlGetdata = new StringBuilder(RSS_TO_JSON_API);
+        urlGetdata.append(RSS_LINK);
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                ProgressDialog mDialog = new ProgressDialog(DisplayRSSFeedActivity.this);
+                //onPreExecute Method
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDialog.setMessage("Please wait...........");
+                        mDialog.show();
+                    }
+                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        // equivalent to doInBackground method from AsyncTask
+                        String result;
+                        HTTPDataHandler httpDataHandler = new HTTPDataHandler();
+                        result = httpDataHandler.getHttpData(urlGetdata.toString());
+//                    }
+//                });
+
+                //onPostExecute Method
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDialog.dismiss();
+                        rssObject = new Gson().fromJson(result, RSSObject.class);
+                        Log.e("The feed from connection", rssObject.getItems().get(0).toString());
+                        // logic for the recyclerview
+                        FeedAdapter adapter = new FeedAdapter(rssObject, getBaseContext());
+                        recyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
     }
 
     private void loadRSS() {

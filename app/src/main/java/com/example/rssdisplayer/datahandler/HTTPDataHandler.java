@@ -11,12 +11,13 @@ import java.net.URL;
 
 public class HTTPDataHandler {
 
-    static String stream = null;
+   // static String stream = null;
 
     public HTTPDataHandler() {
     }
 
     public String getHttpData(String urlString){
+        String streams = "";
         try{
             URL url = new URL(urlString);
             HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
@@ -27,7 +28,7 @@ public class HTTPDataHandler {
                 String line;
                 while((line = bufferedReader.readLine()) != null){
                     stringBuilder.append(line);
-                    stream = stringBuilder.toString();
+                    streams = stringBuilder.toString();
                     httpURLConnection.disconnect();
                 }
             }
@@ -36,7 +37,7 @@ public class HTTPDataHandler {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return stream;
+        return streams;
     }
 
 }
